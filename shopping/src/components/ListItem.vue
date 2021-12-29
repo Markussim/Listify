@@ -1,9 +1,9 @@
 <template>
     <div id="item">
-        <h1>{{ name }}</h1>
+        <h1 :class="{'bought': isBought}">{{ item.name }}</h1>
         <div id="icons">
-            <img v-on:click="$emit('deleteItem', id)" src="../assets/delete.svg" />
-            <img src="../assets/shopping_cart.svg" />
+            <img v-on:click="$emit('deleteItem', item.id)" src="../assets/delete.svg" />
+            <img v-if="!isBought" v-on:click="$emit('buyItem', item.id)" src="../assets/shopping_cart.svg" />
         </div>
     </div>
 </template>
@@ -12,9 +12,13 @@
 export default {
     name: 'ListItem',
     props: {
-        name: String,
-        id: String
-    }
+        item: Object
+    },
+    data() {
+        return {
+            isBought: this.item.bought
+        };
+    },
 }
 </script>
 
@@ -39,5 +43,10 @@ img {
 }
 h1 {
     margin: 0;
+}
+
+.bought {
+    text-decoration: line-through;
+    color: #2c3e50b2;
 }
 </style>

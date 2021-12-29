@@ -1,7 +1,7 @@
 <template>
     <div class="about">
         <div v-for="(item, index) in listItems" :key="index">
-            <ListItem v-bind:name="item.name" v-bind:id="item.id" />
+            <ListItem v-bind:item="item" @deleteItem="deleteItem" @buyItem="buyItem" />
         </div>
     </div>
 </template>
@@ -15,14 +15,21 @@ export default defineComponent({
     data() {
         return {
             message: "Pucko list",
-            listItems: [{ name: "Mjölk", id: 1 }, { name: "Mjöl", id: 2 }, { name: "Brölk", id: 3 }, { name: "Red Bull", id: 4 }, { name: "Tomatsoppa", id: 5 }, { name: "Köttfri köttfärs", id: 6 }]
+            listItems: [{ name: "Mjölk", id: 1, bought: false }, { name: "Mjöl", id: 2, bought: true }, { name: "Brölk", id: 3, bought: false }, { name: "Red Bull", id: 4, bought: false }, { name: "Tomatsoppa", id: 5, bought: false }, { name: "Köttfri köttfärs", id: 6, bought: false }]
         };
     },
     components: { ListItem },
     methods: {
         deleteItem(id) {
-            console.log(id);
             this.listItems = this.listItems.filter(item => item.id !== id);
+        },
+        buyItem(id) {
+            this.listItems = this.listItems.map(item => {
+                if (item.id === id) {
+                    item.bought = !item.bought;
+                }
+                return item;
+            });
         }
     }
 });
