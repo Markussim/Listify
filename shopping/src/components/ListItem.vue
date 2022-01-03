@@ -1,9 +1,10 @@
 <template>
     <div id="item">
-        <h1 :class="{'bought': isBought}">{{ item.name }}</h1>
+        <h1 :class="{'bought': isBought}" v-on:click="$emit('buyItem', {id: item.id, remove: false})">{{ item.name }}</h1>
         <div id="icons">
             <img v-on:click="$emit('deleteItem', item.id)" src="../assets/delete.svg" />
-            <img v-if="!isBought" v-on:click="$emit('buyItem', item.id)" src="../assets/shopping_cart.svg" />
+            <img v-if="!isBought" v-on:click="$emit('buyItem', {id: item.id, remove: false})" src="../assets/shopping_cart.svg" />
+            <img v-else v-on:click="$emit('buyItem', {id: item.id, remove: true})" src="../assets/remove_shopping.svg" />
         </div>
     </div>
 </template>
@@ -48,5 +49,10 @@ h1 {
 .bought {
     text-decoration: line-through;
     color: #2c3e50b2;
+}
+
+#icons img {
+    height: 30px;
+    margin: 0;
 }
 </style>
