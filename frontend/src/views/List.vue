@@ -26,7 +26,7 @@ export default defineComponent({
     methods: {
         deleteItem(_id) {
             this.listItems = this.listItems.filter(item => item._id !== _id);
-            
+
             // Why
             let string = JSON.stringify(this.listItems);
 
@@ -61,7 +61,6 @@ export default defineComponent({
         fetch("http://localhost:3000/api/getList/familj")
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 this.listItems = data;
             });
     }
