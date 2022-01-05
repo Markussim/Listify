@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 //Creates the UserSchema and exports it
 const ListItemScema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,

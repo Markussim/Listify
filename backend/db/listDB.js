@@ -23,7 +23,6 @@ exports.getListItems = (list) => {
 exports.addListItem = (list, name) => {
     return new Promise((resolve, reject) => {
         let listItem = new ListItem({
-            id: uuidv4(),
             name: name,
             list: list,
         });

@@ -19,18 +19,23 @@ export default defineComponent({
     data() {
         return {
             message: "Pucko list",
-            listItems: [{ name: "Mjölk", id: 1, bought: true }, { name: "Mjöl", id: 2, bought: false }, { name: "Brölk", id: 3, bought: true }, { name: "Red Bull", id: 4, bought: false }, { name: "Tomatsoppa", id: 5, bought: false }, { name: "Köttfri köttfärs", id: 6, bought: false }]
+            listItems: null
         };
     },
     components: { ListItem },
     methods: {
-        deleteItem(id) {
-            this.listItems = this.listItems.filter(item => item.id !== id);
+        deleteItem(_id) {
+            this.listItems = this.listItems.filter(item => item._id !== _id);
+            
+            // Why
+            let string = JSON.stringify(this.listItems);
+
+            this.listItems = JSON.parse(string);
         },
         buyItem(obj) {
-            let id = obj.id;
+            let _id = obj._id;
             let remove = obj.remove;
-            let changeId = this.listItems.findIndex(item => item.id === id);
+            let changeId = this.listItems.findIndex(item => item._id === _id);
 
             if (remove) {
                 this.listItems[changeId].bought = false;
@@ -45,10 +50,20 @@ export default defineComponent({
         },
         addItem() {
             if (this.newItem.length > 0) {
-                this.listItems.push({ name: this.newItem, id: this.listItems.length + 1, bought: false });
+                this.listItems.push({ name: this.newItem, _id: this.listItems.length + 1, bought: false });
                 this.newItem = "";
             }
         }
+    },
+    created() {
+        // Get items from http://localhost:3000/api/getList/familj
+
+        fetch("http://localhost:3000/api/getList/familj")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                this.listItems = data;
+            });
     }
 });
 </script>

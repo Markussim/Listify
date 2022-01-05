@@ -3,6 +3,7 @@ module.exports = (function () {
     const router = express.Router();
     const { passport } = require('../passport');
     const { checkAuthenticated, checkNotAuthenticated } = require('../middleware/auth');
+    const listDB = require('../db/listDB');
 
     router.get('/google', passport.authenticate('google', {
         scope: ['profile', 'email']
@@ -28,9 +29,12 @@ module.exports = (function () {
         }
     });
 
-    router.get('/getList', checkAuthenticated, (req, res) => {
-
-    })
+    // Get list of items
+    router.get('/getList/:list', checkAuthenticated, async (req, res) => {
+        const list = req.params.list;
+        const items = await listDB.getListItems(list);
+        res.json(items);
+    });
 
     return router;
 })();
