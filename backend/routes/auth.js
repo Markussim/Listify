@@ -28,6 +28,10 @@ module.exports = (function () {
         }
     });
 
+    router.get('/getList', checkAuthenticated, (req, res) => {
+
+    })
+
     return router;
 })();
 
