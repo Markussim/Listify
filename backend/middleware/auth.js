@@ -12,7 +12,7 @@ exports.checkAuthenticated = (req, res, next) => {
         return next();
     }
 
-    res.redirect('/login');
+    res.redirect('/api/google');
 }
 
 /**
