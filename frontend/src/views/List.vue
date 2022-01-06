@@ -18,7 +18,8 @@ export default defineComponent({
     name: "List",
     data() {
         return {
-            listItems: null
+            listItems: null,
+            connected: true,
         };
     },
     components: { ListItem },
@@ -34,11 +35,11 @@ export default defineComponent({
             // Find the item in the list
             let item = this.listItems.find(item => item._id === obj._id);
 
-             let sendObj = {
+            let sendObj = {
                 list: "familj",
                 id: obj._id
             };
-            if(item.bought) {
+            if (item.bought) {
                 this.$socket.emit('unbuy', sendObj);
             } else {
                 this.$socket.emit('buy', sendObj);
@@ -59,6 +60,22 @@ export default defineComponent({
     sockets: {
         connect: function () {
             console.log('socket connected')
+            console.log(this.connected);
+            if (this.connected == false) {
+                this.connected = true;
+                let sendObj = {
+                    list: "familj",
+                    data: {
+                        listItems: this.listItems
+                    }
+                };
+                this.$socket.emit('sync', sendObj);
+            }
+        },
+
+        disconnect: function () {
+            console.log('socket disconnected')
+            this.connected = false;
         },
 
         syncBack: function (data) {
