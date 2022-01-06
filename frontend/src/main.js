@@ -6,7 +6,7 @@ import io from 'socket.io-client'
 
 const socketio = new VueSocketIO({
     debug: false,
-    connection: io('http://localhost:3000'),
+    connection: io('http://192.168.10.118:3000'),
   });
 
 createApp(App).use(router).use(socketio).mount('#app')

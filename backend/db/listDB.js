@@ -48,3 +48,29 @@ exports.removeListItem = (list, id) => {
         });
     });
 }
+
+// Buy a listitem from list
+exports.buyListItem = (list, id) => {
+    return new Promise((resolve, reject) => {
+        ListItem.findOneAndUpdate({ list: list, _id: id }, { $set: { bought: true } }, { new: true }, (err, listItem) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(listItem);
+            }
+        });
+    });
+}
+
+// Unbuy a listitem from list
+exports.unbuyListItem = (list, id) => {
+    return new Promise((resolve, reject) => {
+        ListItem.findOneAndUpdate({ list: list, _id: id }, { $set: { bought: false } }, { new: true }, (err, listItem) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(listItem);
+            }
+        });
+    });
+}

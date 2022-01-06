@@ -18,7 +18,6 @@ export default defineComponent({
     name: "List",
     data() {
         return {
-            message: "Pucko list",
             listItems: null
         };
     },
@@ -32,20 +31,18 @@ export default defineComponent({
             this.$socket.emit('remove', sendObj);
         },
         buyItem(obj) {
-            let _id = obj._id;
-            let remove = obj.remove;
-            let changeId = this.listItems.findIndex(item => item._id === _id);
+            // Find the item in the list
+            let item = this.listItems.find(item => item._id === obj._id);
 
-            if (remove) {
-                this.listItems[changeId].bought = false;
+             let sendObj = {
+                list: "familj",
+                id: obj._id
+            };
+            if(item.bought) {
+                this.$socket.emit('unbuy', sendObj);
             } else {
-                this.listItems[changeId].bought = true;
+                this.$socket.emit('buy', sendObj);
             }
-
-            // Why
-            let string = JSON.stringify(this.listItems);
-
-            this.listItems = JSON.parse(string);
         },
         addItem() {
             if (this.newItem.length > 0) {

@@ -44,7 +44,16 @@ io.on('connection', (socket) => {
         io.emit('syncBack', await listDB.getListItems(data.list))
     });
 
-    socket.on('disconnect', () => {
+    socket.on("buy", async (data) => {
+        console.log("Requested buy of " + data.id + " from list: " + data.list)
+        await listDB.buyListItem(data.list, data.id)
+        io.emit('syncBack', await listDB.getListItems(data.list))
+    });
+
+    socket.on("unbuy", async (data) => {
+        console.log("Requested unbuy of " + data.id + " from list: " + data.list)
+        await listDB.unbuyListItem(data.list, data.id)
+        io.emit('syncBack', await listDB.getListItems(data.list))
     });
 });
 
