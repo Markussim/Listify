@@ -5,9 +5,8 @@ import VueSocketIO from 'vue-3-socket.io'
 import io from 'socket.io-client'
 
 const socketio = new VueSocketIO({
-    debug: true,
-    connection: io('http://localhost:3000/api/'),
-    options: { path: "/api/" }
+    debug: false,
+    connection: io('http://localhost:3000'),
   });
 
 createApp(App).use(router).use(socketio).mount('#app')

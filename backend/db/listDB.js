@@ -35,3 +35,16 @@ exports.addListItem = (list, name) => {
         });
     });
 }
+
+// Remove a listitem from list
+exports.removeListItem = (list, id) => {
+    return new Promise((resolve, reject) => {
+        ListItem.deleteOne({ list: list, _id: id }, (err, listItem) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(listItem);
+            }
+        });
+    });
+}

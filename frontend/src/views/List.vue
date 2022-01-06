@@ -25,12 +25,11 @@ export default defineComponent({
     components: { ListItem },
     methods: {
         deleteItem(_id) {
-            this.listItems = this.listItems.filter(item => item._id !== _id);
-
-            // Why
-            let string = JSON.stringify(this.listItems);
-
-            this.listItems = JSON.parse(string);
+            let sendObj = {
+                list: "familj",
+                id: _id
+            };
+            this.$socket.emit('remove', sendObj);
         },
         buyItem(obj) {
             let _id = obj._id;
@@ -50,19 +49,34 @@ export default defineComponent({
         },
         addItem() {
             if (this.newItem.length > 0) {
-                this.listItems.push({ name: this.newItem, _id: this.listItems.length + 1, bought: false });
+                let sendObj = {
+                    list: "familj",
+                    name: this.newItem
+                };
+                this.$socket.emit('add', sendObj);
                 this.newItem = "";
+                console.log(this.newItem);
             }
         }
     },
-    created() {
-        // Get items from http://localhost:3000/api/getList/familj
+    sockets: {
+        connect: function () {
+            console.log('socket connected')
+        },
 
-        fetch("http://localhost:3000/api/getList/familj")
-            .then(response => response.json())
-            .then(data => {
-                this.listItems = data;
-            });
+        syncBack: function (data) {
+            this.listItems = data;
+        }
+    },
+    created() {
+        console.log("Request sync");
+        let sendObj = {
+            list: "familj",
+            data: {
+                listItems: this.listItems
+            }
+        };
+        this.$socket.emit('sync', sendObj);
     }
 });
 </script>
