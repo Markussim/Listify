@@ -4,8 +4,8 @@
             <ListItem v-bind:item="item" @deleteItem="deleteItem" @buyItem="buyItem" />
         </div>
         <div id="add">
-            <input type="text" v-model="newItem" />
-            <button v-on:click="addItem">Add</button>
+            <input id="newItem" type="text" v-model="newItem" placeholder="New item" />
+            <img v-on:click="addItem" src="../assets/add.svg" >
         </div>
     </div>
 </template>
@@ -105,5 +105,17 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     margin: 10px;
+}
+#newItem {
+    border: none;
+    outline: none;
+    color: #2c3e50;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    border-bottom: 3px solid #2c3e50;
+    max-width: 256px;
+    padding: 0;
+    background-color: rgba(245, 222, 179, 0);
 }
 </style>
