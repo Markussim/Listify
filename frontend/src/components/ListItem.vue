@@ -52,7 +52,8 @@ h1 {
 }
 
 #icons img {
-    height: 30px;
+    height: 40px;
     margin: 0;
+    margin-right: 10px;
 }
 </style>

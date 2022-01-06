@@ -1,12 +1,13 @@
 <template>
     <div class="about">
         <div v-for="(item) in listItems" :key="item">
-            <ListItem v-bind:item="item" @deleteItem="deleteItem" @buyItem="buyItem" />
+            <ListItem :item="item" @deleteItem="deleteItem" @buyItem="buyItem" />
         </div>
-        <div id="add">
+        <form @submit="addItem" id="add" v-if="this.listItems != null">
             <input id="newItem" type="text" v-model="newItem" placeholder="New item" />
-            <img v-on:click="addItem" src="../assets/add.svg" >
-        </div>
+            <img @click="addItem" src="../assets/add.svg" />
+            <input type="submit" hidden />
+        </form>
     </div>
 </template>
 
@@ -45,7 +46,8 @@ export default defineComponent({
                 this.$socket.emit('buy', sendObj);
             }
         },
-        addItem() {
+        addItem(e) {
+            e.preventDefault();
             if (this.newItem.length > 0) {
                 let sendObj = {
                     list: "familj",
@@ -53,9 +55,15 @@ export default defineComponent({
                 };
                 this.$socket.emit('add', sendObj);
                 this.newItem = "";
-                console.log(this.newItem);
+                // Unfocus the input field
+                document.getElementById("newItem").blur();
+
+                // Remove and then add fadeClass to the form
+                let form = document.getElementById("add");
+                form.classList.remove("fadeClass");
+                form.classList.add("fadeClass");
             }
-        }
+        },
     },
     sockets: {
         connect: function () {
@@ -95,7 +103,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 #add {
     border: #42b983 solid 1px;
     border-radius: 5px;
@@ -117,5 +125,26 @@ export default defineComponent({
     max-width: 256px;
     padding: 0;
     background-color: rgba(245, 222, 179, 0);
+    transition: border 0.25s;
+}
+#newItem:focus {
+    border-bottom: 3px solid #42b983;
+}
+
+.fadeClass {
+    animation: fadeReplace 0.5s ease-in-out;
+}
+
+img {
+    margin-right: 10px;
+    height: 40px;
+}
+@keyframes fadeReplace {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 </style>
