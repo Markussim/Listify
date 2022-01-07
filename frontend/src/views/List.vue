@@ -24,8 +24,8 @@ export default defineComponent({
     name: "List",
     data() {
         return {
-            listItems: null,
-            connected: true,
+            listItems: localStorage.getItem("list") ? JSON.parse(localStorage.getItem("list")) : null,
+            connected: false,
         };
     },
     components: { ListItem },
@@ -104,17 +104,22 @@ export default defineComponent({
 
         syncBack: function (data) {
             this.listItems = data;
+            localStorage.setItem("list", JSON.stringify(this.listItems));
         }
     },
     created() {
         console.log("Request sync");
+        console.log(localStorage.getItem("list"));
+        this.connected = this.$socket.connected;
         let sendObj = {
             list: "familj",
             data: {
                 listItems: this.listItems
             }
         };
-        this.$socket.emit('sync', sendObj);
+        if(this.connected) {
+            this.$socket.emit('sync', sendObj);
+        }
     }
 });
 </script>

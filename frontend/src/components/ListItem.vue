@@ -5,6 +5,8 @@
             <img v-if="connected" v-on:click="$emit('deleteItem', item._id)" src="../assets/delete.svg" />
             <img v-if="!isBought" v-on:click="$emit('buyItem', {_id: item._id, remove: false})" src="../assets/shopping_cart.svg" />
             <img v-else v-on:click="$emit('buyItem', {_id: item._id, remove: true})" src="../assets/remove_shopping.svg" />
+            <img src="../assets/remove_shopping.svg" hidden>
+            <img src="../assets/shopping_cart.svg" hidden>
         </div>
     </div>
 </template>
@@ -45,6 +47,7 @@ img {
 }
 h1 {
     margin: 0;
+    width: calc(100% - 100px);
 }
 
 .bought {
