@@ -12,7 +12,10 @@ module.exports = (function () {
     router.get('/google/callback', passport.authenticate('google', {
         failureRedirect: '/login'
     }), async (req, res) => {
-        console.log(await req.user);
+        if(!await req.user.emails[0].value.includes('markus.simonsen@gmail.com')) {
+            console.log('Not allowed');
+            req.logout();
+        }
         res.redirect('/');
     });
 

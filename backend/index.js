@@ -12,6 +12,8 @@ const path = require('path')
 const database = require('./db/database')
 const http = require('http');
 const { Server } = require("socket.io");
+const { authorize } = require("passport.socketio");
+const cookieParser = require('cookie-parser');
 
 database.cnctDB('shopping')
 const listDB = require('./db/listDB')
@@ -25,6 +27,16 @@ app.use("/api", require('./routes/auth'))
 
 const server = http.createServer(app);
 const io = new Server().listen(server);
+
+io.use(
+    authorize({
+        cookieParser: cookieParser,
+        key: 'connect.sid',
+        secret: process.env.SECRET || 'keyboard cat',
+        store: passport.store
+    })
+);
+
 
 io.on('connection', (socket) => {
     socket.on('sync', async (data) => {
