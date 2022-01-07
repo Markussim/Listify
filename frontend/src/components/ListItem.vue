@@ -2,7 +2,7 @@
     <div id="item">
         <h1 :class="{'bought': isBought}" v-on:click="$emit('buyItem', {_id: item._id, remove: false})">{{ item.name }}</h1>
         <div id="icons">
-            <img v-on:click="$emit('deleteItem', item._id)" src="../assets/delete.svg" />
+            <img v-if="connected" v-on:click="$emit('deleteItem', item._id)" src="../assets/delete.svg" />
             <img v-if="!isBought" v-on:click="$emit('buyItem', {_id: item._id, remove: false})" src="../assets/shopping_cart.svg" />
             <img v-else v-on:click="$emit('buyItem', {_id: item._id, remove: true})" src="../assets/remove_shopping.svg" />
         </div>
@@ -13,7 +13,8 @@
 export default {
     name: 'ListItem',
     props: {
-        item: Object
+        item: Object,
+        connected: Boolean,
     },
     data() {
         return {

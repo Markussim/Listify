@@ -29,7 +29,42 @@ const io = new Server().listen(server);
 io.on('connection', (socket) => {
     socket.on('sync', async (data) => {
         console.log("Requested sync for list: " + data.list)
-        socket.emit('syncBack', await listDB.getListItems(data.list))
+
+        let diff = false
+
+        if (data.data.listItems != null) {
+            let serverList = await listDB.getListItems(data.list)
+
+            let clientList = data.data.listItems
+
+            for (let index = 0; index < clientList.length; index++) {
+                const element = clientList[index];
+                // Check if element.id exists in serverList
+                let sharedIndex = -1
+                for (let i = 0; i < serverList.length; i++) {
+                    if (serverList[i]._id.toString() == element._id) {
+                        sharedIndex = i
+                        break
+                    }
+                }
+                if (sharedIndex !== -1) {
+                    const serverBought = serverList[sharedIndex].bought
+                    const clientBought = element.bought
+
+                    if (!serverBought && clientBought) {
+                        await listDB.buyListItem(data.list, element._id)
+                        diff = true
+                    }
+                }
+            }
+
+        }
+        if(diff) {
+            io.emit('syncBack', await listDB.getListItems(data.list))
+        } else {
+            socket.emit('syncBack', await listDB.getListItems(data.list))
+        }
+        
     });
 
     socket.on('add', async (data) => {

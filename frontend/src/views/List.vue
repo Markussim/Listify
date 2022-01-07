@@ -1,9 +1,14 @@
 <template>
     <div class="about">
         <div v-for="(item) in listItems" :key="item">
-            <ListItem :item="item" @deleteItem="deleteItem" @buyItem="buyItem" />
+            <ListItem
+                :item="item"
+                :connected="connected"
+                @deleteItem="deleteItem"
+                @buyItem="buyItem"
+            />
         </div>
-        <form @submit="addItem" id="add" v-if="this.listItems != null">
+        <form @submit="addItem" id="add" v-if="this.listItems != null && this.connected">
             <input id="newItem" type="text" v-model="newItem" placeholder="New item" />
             <img @click="addItem" src="../assets/add.svg" />
             <input type="submit" hidden />
@@ -40,11 +45,22 @@ export default defineComponent({
                 list: "familj",
                 id: obj._id
             };
-            if (item.bought) {
-                this.$socket.emit('unbuy', sendObj);
-            } else {
-                this.$socket.emit('buy', sendObj);
+
+            if (this.connected) {
+                if (item.bought) {
+                    this.$socket.emit('unbuy', sendObj);
+                } else {
+                    this.$socket.emit('buy', sendObj);
+                }
             }
+
+            // Change the bought status of the item
+            this.listItems.find(item => item._id === obj._id).bought = !item.bought;
+
+            // Why
+            let string = JSON.stringify(this.listItems);
+            this.listItems = JSON.parse(string);
+
         },
         addItem(e) {
             e.preventDefault();
