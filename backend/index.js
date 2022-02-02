@@ -94,10 +94,7 @@ io.on("connection", (socket) => {
 app.use(history());
 
 //Adds VueJS build
-app.use(
-  "/",
-  express.static(path.join(path.resolve(), "../frontend-vite/dist"))
-);
+app.use("/", express.static(path.join(path.resolve(), "../frontend/dist")));
 
 server.listen(port, () => {
   console.log(

@@ -3,7 +3,7 @@
     <router-link to="/about">About</router-link> |
     <router-link to="/list">List</router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
@@ -30,5 +30,4 @@ html {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-
 </style>
