@@ -7,7 +7,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.25"
+    "socket.io-client": "^4.4.1",
+    "socketio": "^1.0.0",
+    "vue": "^3.2.25",
+    "vue-3-socket.io": "^1.0.4",
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
